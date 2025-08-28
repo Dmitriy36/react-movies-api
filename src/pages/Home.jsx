@@ -1,22 +1,48 @@
 import MovieCard from "../components/MovieCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { searchMovies, getPopularMovies } from "../services/api";
 import "../css/Home.css";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [movies, setMovies] = useState([]); // so that whenever search results change, it would re-render the component.
+  const [error, setError] = useState(null); // for the catch block to keep track.
+  const [loading, setLoading] = useState(true); // to keep track of whether it's loading, default is true because starts off loading.
 
-  const movies = [
-    { id: 1, title: "john wick", release_date: "2020" },
-    { id: 2, title: "the cube", release_date: "1997" },
-    { id: 3, title: "the matrix", release_date: "1999" },
-    { id: 4, title: "matrix: constipations", release_date: "2003" },
-    { id: 5, title: "lolita", release_date: "1923" },
-  ];
+  useEffect(() => {
+    const loadPopularMovies = async () => {
+      try {
+        const popularMovies = await getPopularMovies();
+        setMovies(popularMovies);
+      } catch (err) {
+        console.log(err);
+        setError("Failed to load movies...");
+      } finally {
+        setLoading(false); // whether there was an error or not - it's no longer loading! So, false.
+      }
+    };
 
-  const handleSearch = (e) => {
+    loadPopularMovies();
+  }, []); // if the dependency array is empty, it would just be ran once, on mounting.
+
+  const handleSearch = async (e) => {
     e.preventDefault();
-    alert(searchQuery);
-    setSearchQuery("");
+    if (!searchQuery.trim()) return; // disallow empty spaces search.
+    if (loading) return; // won't allow to search while already searching for something.
+    setLoading(true);
+
+    try {
+      const searchResults = await searchMovies(searchQuery);
+      setMovies(searchResults);
+      setError(null);
+    } catch (err) {
+      console.log(err);
+      setError("failed to search movies...");
+    } finally {
+      setLoading(false);
+    }
+
+    // setSearchQuery("");
   };
 
   return (
@@ -34,11 +60,16 @@ function Home() {
         </button>
       </form>
 
-      <div className="movies-grid">
-        {movies.map((movie) => (
-          <MovieCard movie={movie} key={movie.id} />
-        ))}
-      </div>
+      {error && <div className="error-message">{error}</div>}
+      {loading ? (
+        <div className="loading">Loading...</div>
+      ) : (
+        <div className="movies-grid">
+          {movies.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
