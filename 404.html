@@ -1,0 +1,12 @@
+<script>
+  (function () {
+    window.location.replace(
+      window.location.protocol +
+        "//" +
+        window.location.host +
+        "/?/" +
+        window.location.pathname.slice(1) +
+        window.location.search
+    );
+  })();
+</script>
