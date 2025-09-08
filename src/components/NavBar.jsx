@@ -10,7 +10,7 @@ function NavBar() {
         <Link to="/" className="nav-link">
           Home
         </Link>
-        <Link to="/favorites" className="nav-link">
+        <Link to="/react-movies-api/favorites" className="nav-link">
           Favorites
         </Link>
       </div>

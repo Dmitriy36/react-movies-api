@@ -13,6 +13,7 @@ function App() {
         <main className="main-content">
           <nav>
             <Link to="/">Home</Link>
+            <Link to="/">Home</Link>
             <br />
             <Link to="/react-movies-api/favorites">Favorites</Link>
           </nav>
