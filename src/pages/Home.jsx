@@ -23,7 +23,7 @@ function Home() {
     };
 
     loadPopularMovies();
-  }, []); // if the dependency array is empty, it would just be ran once, on mounting....
+  }, []); // if the dependency array is empty, it would just be ran once, on mounting...
 
   const handleSearch = async (e) => {
     e.preventDefault();
