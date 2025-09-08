@@ -1,6 +1,5 @@
 {
   "name": "react-movies-api",
-  "homepage": "https://dmitriy36.github.io/react-movies-api/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
